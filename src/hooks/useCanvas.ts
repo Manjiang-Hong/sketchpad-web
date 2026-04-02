@@ -85,9 +85,12 @@ export const useCanvas = () => {
   }, [])
   
   // 绘制单条笔迹
-  const drawStroke = useCallback((stroke: Stroke, viewport: Viewport) => {
+  const drawStroke = useCallback((stroke: Stroke, _viewport: Viewport) => {
     const ctx = ctxRef.current
     if (!ctx || stroke.points.length < 2) return
+    
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const _unused = _viewport
     
     // iframe 模式：容器已应用变换，Canvas 绘制不需要再变换
     // 非iframe 模式：Canvas 需要应用变换
@@ -160,10 +163,13 @@ export const useCanvas = () => {
     points: Point[],
     color: string,
     size: number,
-    viewport: Viewport
+    _viewport: Viewport
   ) => {
     const ctx = ctxRef.current
     if (!ctx || points.length < 2) return
+    
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const _unused = _viewport
     
     ctx.strokeStyle = color
     ctx.lineWidth = size
@@ -185,9 +191,12 @@ export const useCanvas = () => {
   }, [])
   
   // 绘制备注文本和框（带删除按钮）
-  const drawNotes = useCallback((notes: TextNote[], viewport: Viewport) => {
+  const drawNotes = useCallback((notes: TextNote[], _viewport: Viewport) => {
     const ctx = ctxRef.current
     if (!ctx) return
+    
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const _unused = _viewport
     
     notes.forEach(note => {
       // 绘制框

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SketchPad Web 部署指南</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+        .repo-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        .repo-link:hover {
+            transform: translateY(-2px);
+        }
+        .content {
+            padding: 40px;
+        }
+        .step {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+        .step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            font-size: 20px;
+            margin-right: 15px;
+        }
+        .step-title {
+            display: inline-block;
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            vertical-align: middle;
+        }
+        .step-content {
+            margin-top: 20px;
+            line-height: 1.8;
+            color: #555;
+        }
+        .step-content ul {
+            margin-left: 20px;
+            margin-top: 15px;
+        }
+        .step-content li {
+            margin-bottom: 10px;
+        }
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .warning strong {
+            color: #856404;
+        }
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .success strong {
+            color: #155724;
+        }
+        .test-accounts {
+            background: #e7f3ff;
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        .test-accounts h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        .account-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .account-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .account-card .username {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+        .account-card .password {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background 0.2s;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background: #5568d3;
+        }
+        .btn-secondary {
+            background: #6c757d;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 30px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #e9ecef;
+        }
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            position: relative;
+        }
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: #e9ecef;
+            z-index: 0;
+        }
+        .progress-item {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+        }
+        .progress-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e9ecef;
+            color: #666;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .progress-item.completed .progress-circle {
+            background: #28a745;
+            color: white;
+        }
+        .progress-item.active .progress-circle {
+            background: #667eea;
+            color: white;
+        }
+        .progress-label {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 SketchPad Web 部署指南</h1>
+            <p>AI-powered design annotation platform</p>
+            <a href="https://github.com/Manjiang-Hong/sketchpad-web" target="_blank" class="repo-link">
+                📦 GitHub 仓库
+            </a>
+        </div>
+
+        <div class="content">
+            <div class="progress-tracker">
+                <div class="progress-item completed">
+                    <div class="progress-circle">✓</div>
+                    <div class="progress-label">代码已推送</div>
+                </div>
+                <div class="progress-item active">
+                    <div class="progress-circle">2</div>
+                    <div class="progress-label">部署后端</div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-circle">3</div>
+                    <div class="progress-label">部署前端</div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-circle">4</div>
+                    <div class="progress-label">测试验证</div>
+                </div>
+            </div>
+
+            <div class="success">
+                <strong>✅ 步骤 1 已完成：</strong>代码已成功推送到 GitHub 仓库
+                <a href="https://github.com/Manjiang-Hong/sketchpad-web" target="_blank" style="color: #155724; margin-left: 10px;">查看仓库 →</a>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <span class="step-title">部署后端到 Railway</span>
+                <div class="step-content">
+                    <p><strong>Railway</strong> 是一个现代化的云平台，提供免费额度（$5/月），足够测试使用。</p>
+                    
+                    <ul>
+                        <li>
+                            <strong>访问 Railway：</strong>
+                            <a href="https://railway.app/" target="_blank" class="btn">打开 Railway</a>
+                        </li>
+                        <li>点击右上角 <strong>"Login"</strong>，选择 <strong>"Login with GitHub"</strong></li>
+                        <li>授权 Railway 访问你的 GitHub 账号</li>
+                        <li>登录后，点击 <strong>"New Project"</strong></li>
+                        <li>选择 <strong>"Deploy from GitHub repo"</strong></li>
+                        <li>找到并选择 <strong>"sketchpad-web"</strong> 仓库</li>
+                    </ul>
+
+                    <div class="warning">
+                        <strong>⚠️ 重要：添加环境变量</strong>
+                        <p>在部署前，需要添加以下环境变量：</p>
+                        <div class="code-block">
+JWT_SECRET=sketchpad-production-secret-2026
+PORT=3001
+                        </div>
+                        <p><strong>操作步骤：</strong>Settings → Variables → Add Variable</p>
+                    </div>
+
+                    <div class="warning">
+                        <strong>⚠️ 重要：配置持久化存储</strong>
+                        <p>Railway 默认每次部署会重置文件系统，必须添加 Volume 才能保存用户数据。</p>
+                        <ul style="margin-top: 10px;">
+                            <li>在项目中点击 <strong>"Volumes"</strong> 标签</li>
+                            <li>点击 <strong>"Add Volume"</strong></li>
+                            <li><strong>挂载路径：</strong><code>/app/server/data</code></li>
+                            <li>点击 <strong>"Add Volume"</strong> 保存</li>
+                        </ul>
+                    </div>
+
+                    <div class="success">
+                        <strong>✅ 部署成功后：</strong>
+                        <p>复制后端 URL（类似：<code>https://sketchpad-web-production-abc123.up.railway.app</code>）</p>
+                        <p>下一步部署前端时需要用到这个地址！</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <span class="step-title">部署前端到 Vercel</span>
+                <div class="step-content">
+                    <p><strong>Vercel</strong> 是 React/Vite 项目的最佳部署平台，免费且自动提供 HTTPS。</p>
+                    
+                    <ul>
+                        <li>
+                            <strong>访问 Vercel：</strong>
+                            <a href="https://vercel.com/" target="_blank" class="btn">打开 Vercel</a>
+                        </li>
+                        <li>点击右上角 <strong>"Sign Up"</strong>，选择 <strong>"Continue with GitHub"</strong></li>
+                        <li>授权 Vercel 访问你的 GitHub 账号</li>
+                        <li>登录后，点击 <strong>"Add New Project"</strong></li>
+                        <li>找到 <strong>"sketchpad-web"</strong> 仓库，点击 <strong>"Import"</strong></li>
+                        <li>Framework Preset 会自动检测为 <strong>"Vite"</strong></li>
+                    </ul>
+
+                    <div class="warning">
+                        <strong>⚠️ 重要：配置环境变量</strong>
+                        <p>在部署前，需要添加后端 API 地址：</p>
+                        <div class="code-block">
+VITE_API_HOST=sketchpad-web-production-abc123.up.railway.app
+                        </div>
+                        <p><strong>操作步骤：</strong>Environment Variables → Add → Name: <code>VITE_API_HOST</code> → Value: 上一步复制的后端域名</p>
+                        <p style="margin-top: 10px; color: #dc3545;"><strong>注意：</strong>只填域名，不要带 <code>https://</code></p>
+                    </div>
+
+                    <ul>
+                        <li>点击 <strong>"Deploy"</strong>，等待构建完成（约 1-2 分钟）</li>
+                        <li>部署成功后，点击 <strong>"Continue to Dashboard"</strong></li>
+                        <li>在 Dashboard 顶部可以看到访问链接（类似：<code>https://sketchpad-web.vercel.app</code>）</li>
+                    </ul>
+
+                    <div class="success">
+                        <strong>✅ 部署完成！</strong>
+                        <p>点击链接访问你的 SketchPad Web 应用 🎉</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                <span class="step-title">测试验证</span>
+                <div class="step-content">
+                    <p>使用以下测试账号登录并验证功能：</p>
+                    
+                    <div class="test-accounts">
+                        <h3>🔐 测试账号</h3>
+                        <div class="account-grid">
+                            <div class="account-card">
+                                <div class="username">test1</div>
+                                <div class="password">密码: test123</div>
+                            </div>
+                            <div class="account-card">
+                                <div class="username">test2</div>
+                                <div class="password">密码: test123</div>
+                            </div>
+                            <div class="account-card">
+                                <div class="username">test3</div>
+                                <div class="password">密码: test123</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p style="margin-top: 20px;"><strong>验证清单：</strong></p>
+                    <ul>
+                        <li>✅ 登录功能正常</li>
+                        <li>✅ 可以创建新的设计稿</li>
+                        <li>✅ 画笔绘制功能正常</li>
+                        <li>✅ 橡皮擦功能正常</li>
+                        <li>✅ 项目自动保存到云端</li>
+                        <li>✅ 刷新页面后数据保留</li>
+                        <li>✅ 退出登录功能正常</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">?</span>
+                <span class="step-title">常见问题</span>
+                <div class="step-content">
+                    <p><strong>Q: 用户数据丢失怎么办？</strong></p>
+                    <p>A: 检查 Railway Volume 是否正确挂载到 <code>/app/server/data</code></p>
+                    
+                    <p style="margin-top: 15px;"><strong>Q: 前端无法连接后端？</strong></p>
+                    <p>A: 检查 Vercel 环境变量 <code>VITE_API_HOST</code> 是否正确设置（只填域名，不带 https://）</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Q: 登录失败？</strong></p>
+                    <p>A: 检查后端日志（Railway 控制台），确认 JWT_SECRET 环境变量已设置</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Q: 跨域错误？</strong></p>
+                    <p>A: 后端已配置 CORS，允许所有 .vercel.app 域名。如有问题，检查后端日志。</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>🎨 SketchPad Web - AI-powered design annotation platform</p>
+            <p style="margin-top: 10px;">
+                <a href="https://github.com/Manjiang-Hong/sketchpad-web" target="_blank" style="color: #667eea; text-decoration: none;">GitHub</a>
+                &nbsp;•&nbsp;
+                <a href="https://railway.app/" target="_blank" style="color: #667eea; text-decoration: none;">Railway</a>
+                &nbsp;•&nbsp;
+                <a href="https://vercel.com/" target="_blank" style="color: #667eea; text-decoration: none;">Vercel</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

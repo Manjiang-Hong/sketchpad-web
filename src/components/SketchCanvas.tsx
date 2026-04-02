@@ -40,7 +40,7 @@ interface SketchCanvasProps {
   username: string
 }
 
-export const SketchCanvas: React.FC<SketchCanvasProps> = ({ userId, username }) => {
+export const SketchCanvas: React.FC<SketchCanvasProps> = ({ userId }) => {
   // 状态
   const [project, setProject] = useState<Project>(() => createProject())
   const [tool, setTool] = useState<ToolType>('pen')
@@ -263,7 +263,7 @@ export const SketchCanvas: React.FC<SketchCanvasProps> = ({ userId, username }) 
   }, [isDrawing, tool, currentPoints, color, brushSize, getPointerPos, drawRealtime, eraseStrokesAtPoint, redrawStrokesOnly, project.bgImage, isSelectingNote])
   
   // 结束绘制
-  const handlePointerUp = useCallback((e: React.PointerEvent) => {
+  const handlePointerUp = useCallback(() => {
     if (isPanningRef.current) {
       isPanningRef.current = false
       lastPanPointRef.current = null

@@ -1,6 +1,9 @@
 // 最小化测试版本
 import React from 'react'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const _unused = React
+
 function App() {
   return (
     <div style={{ 
