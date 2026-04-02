@@ -44,8 +44,8 @@ app.use(cors({
 }))
 app.use(express.json())
 
-// 数据目录
-const DATA_DIR = path.join(__dirname, 'data')
+// 数据目录（Railway 支持 Volume 挂载，如果没有则使用默认路径）
+const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data')
 const USERS_FILE = path.join(DATA_DIR, 'users.json')
 const PROJECTS_DIR = path.join(DATA_DIR, 'projects')
 

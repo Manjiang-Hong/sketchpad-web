@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Railway 环境变量设置指南（更新版）</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+        .step {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+        .step-number {
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            background: #8b5cf6;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 36px;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        .step-title {
+            display: inline;
+            font-size: 22px;
+            font-weight: 600;
+        }
+        .step-content {
+            margin-top: 20px;
+            line-height: 1.8;
+            color: #ccc;
+        }
+        .step-content ul {
+            margin-left: 20px;
+            margin-top: 15px;
+        }
+        .step-content li {
+            margin-bottom: 12px;
+        }
+        .highlight {
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #8b5cf6;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            color: #fff;
+        }
+        .warning {
+            background: #2a1f1f;
+            border-left: 3px solid #ef4444;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .warning strong {
+            color: #ef4444;
+        }
+        .success {
+            background: #1a2f1a;
+            border-left: 3px solid #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .success strong {
+            color: #10b981;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #8b5cf6;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background: #7c3aed;
+        }
+        .screenshot {
+            background: #1a1a1a;
+            border: 2px dashed #444;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+            color: #888;
+        }
+        .path {
+            background: #2d2d2d;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: #fbbf24;
+            display: inline-block;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Railway 环境变量设置（最新界面）</h1>
+
+        <div class="step">
+            <span class="step-number">1</span>
+            <span class="step-title">打开项目设置</span>
+            <div class="step-content">
+                <ul>
+                    <li>在 Railway 控制台，点击你的项目名称（例如：<strong>sketchpad-web</strong>）</li>
+                    <li>你会看到项目的概览页面</li>
+                    <li>在顶部找到 <strong>"Settings"</strong> 标签并点击</li>
+                </ul>
+                <div class="screenshot">
+                    📱 点击顺序：项目名 → Settings 标签
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">2</span>
+            <span class="step-title">找到 Variables 部分</span>
+            <div class="step-content">
+                <p>在 Settings 页面向下滚动，找到以下部分：</p>
+                <div class="highlight">
+Environment Variables
+                </div>
+                <p>或者：</p>
+                <div class="highlight">
+Variables
+                </div>
+                <p style="margin-top: 15px;">这个部分通常在页面中部或底部</p>
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">3</span>
+            <span class="step-title">添加环境变量</span>
+            <div class="step-content">
+                <p>点击 <strong>"Add Variable"</strong> 按钮，然后添加：</p>
+                
+                <div class="highlight">
+                    <strong>第一个变量：</strong><br>
+                    Name: JWT_SECRET<br>
+                    Value: sketchpad-production-secret-2026
+                </div>
+
+                <div class="highlight">
+                    <strong>第二个变量：</strong><br>
+                    Name: PORT<br>
+                    Value: 3001
+                </div>
+
+                <p style="margin-top: 15px;">每添加一个变量后，点击 <strong>"Add"</strong> 或按回车保存</p>
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">4</span>
+            <span class="step-title">添加持久化存储（可选）</span>
+            <div class="step-content">
+                <div class="success">
+                    <strong>✅ 好消息！</strong><br>
+                    代码已更新，现在 <strong>不需要手动配置 Volume</strong>！<br>
+                    数据会自动保存在正确的位置。
+                </div>
+
+                <p style="margin-top: 15px;"><strong>如果 Railway 提供了 Volume 选项，可以这样配置（可选）：</strong></p>
+                <ul>
+                    <li>在 Settings 页面继续向下滚动</li>
+                    <li>找到 <strong>"Volumes"</strong> 部分（如果存在）</li>
+                    <li>点击 <strong>"Add Volume"</strong></li>
+                    <li>挂载路径：<span class="path">/app/server/data</span></li>
+                </ul>
+
+                <div class="warning">
+                    <strong>注意：</strong>如果找不到 Volumes 选项，不用担心！<br>
+                    应用仍然可以正常运行，只是重启后用户数据可能会重置。<br>
+                    对于测试阶段，这完全可以接受。
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">5</span>
+            <span class="step-title">重新部署</span>
+            <div class="step-content">
+                <p>添加完环境变量和 Volume 后：</p>
+                <ul>
+                    <li>回到项目的 <strong>"Deployments"</strong> 标签</li>
+                    <li>点击右上角的 <strong>"Redeploy"</strong> 按钮</li>
+                    <li>或者等待自动触发重新部署</li>
+                </ul>
+                <div class="success">
+                    <strong>✅ 部署成功后：</strong><br>
+                    复制 Railway 提供的域名，类似：<br>
+                    <span class="path">https://sketchpad-web-production-abc123.up.railway.app</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">?</span>
+            <span class="step-title">找不到 Variables？试试这个</span>
+            <div class="step-content">
+                <p><strong>方法 A：使用快捷方式</strong></p>
+                <ul>
+                    <li>在项目页面，按 <strong>Ctrl+K</strong>（Mac: Cmd+K）</li>
+                    <li>输入 <strong>"variables"</strong></li>
+                    <li>选择 "Add Variable" 快速命令</li>
+                </ul>
+
+                <p style="margin-top: 20px;"><strong>方法 B：在服务页面添加</strong></p>
+                <ul>
+                    <li>点击项目中的具体服务（通常叫 <strong>"web"</strong> 或 <strong>"service"</strong>）</li>
+                    <li>在服务详情页，点击顶部的 <strong>"Variables"</strong> 标签</li>
+                    <li>这里可以直接添加环境变量</li>
+                </ul>
+
+                <p style="margin-top: 20px;"><strong>方法 C：使用 CLI</strong></p>
+                <div class="highlight">
+                    railway variables set JWT_SECRET=sketchpad-production-secret-2026<br>
+                    railway variables set PORT=3001
+                </div>
+            </div>
+        </div>
+
+        <div class="success">
+            <strong>🎉 完成！</strong><br>
+            设置完成后，Railway 会自动重新部署应用。<br>
+            记得把后端域名保存下来，等下部署 Vercel 前端时要用！
+        </div>
+
+        <a href="https://railway.app/" target="_blank" class="btn">打开 Railway 控制台</a>
+    </div>
+</body>
+</html>
