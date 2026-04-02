@@ -23,13 +23,11 @@ import {
   BRUSH_SIZES,
 } from '../types'
 import { useCanvas } from '../hooks/useCanvas'
-import { 
-  saveProject, 
-  loadProject, 
-  createProject, 
-  getAllProjects 
+import {
+  saveProject,
+  createProject,
 } from '../services/storage'
-import { uploadSketch, saveProjectToCloud } from '../services/api'
+import { uploadSketch } from '../services/api'
 import './SketchCanvas.css'
 
 // 简单的 UUID 生成函数
@@ -51,7 +49,9 @@ export const SketchCanvas: React.FC<SketchCanvasProps> = ({ userId }) => {
   const [showSendDialog, setShowSendDialog] = useState(false)
   // 备注工具状态
   const [isSelectingNote, setIsSelectingNote] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [noteStart, setNoteStart] = useState<Point | null>(null)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [noteEnd, setNoteEnd] = useState<Point | null>(null)
   // 备注框选使用 ref 避免状态更新延迟
   const isSelectingNoteRef = useRef(false)
