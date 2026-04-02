@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>旅游APP - 首页原型</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+      background: #f5f5f5;
+      max-width: 430px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: #fff;
+    }
+    
+    /* 顶部搜索栏 */
+    .header {
+      background: linear-gradient(135deg, #FF6B35 0%, #FF8E53 100%);
+      padding: 12px 16px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+    
+    .location {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 14px;
+    }
+    
+    .location-icon {
+      width: 16px;
+      height: 16px;
+    }
+    
+    .header-actions {
+      display: flex;
+      gap: 16px;
+    }
+    
+    .header-actions span {
+      font-size: 20px;
+      cursor: pointer;
+    }
+    
+    .search-bar {
+      background: #fff;
+      border-radius: 24px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .search-icon {
+      color: #999;
+      font-size: 18px;
+    }
+    
+    .search-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 14px;
+      color: #333;
+    }
+    
+    .search-input::placeholder {
+      color: #999;
+    }
+    
+    /* 核心功能入口 */
+    .main-nav {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      padding: 16px;
+      background: #fff;
+    }
+    
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    
+    .nav-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      transition: transform 0.2s;
+    }
+    
+    .nav-item:hover .nav-icon {
+      transform: scale(1.05);
+    }
+    
+    .nav-item:nth-child(1) .nav-icon { background: linear-gradient(135deg, #5B8FF9, #6495ED); }
+    .nav-item:nth-child(2) .nav-icon { background: linear-gradient(135deg, #FF7A45, #FF8E53); }
+    .nav-item:nth-child(3) .nav-icon { background: linear-gradient(135deg, #36CFC9, #5CDBD3); }
+    .nav-item:nth-child(4) .nav-icon { background: linear-gradient(135deg, #FFC53D, #FFEC3D); }
+    .nav-item:nth-child(5) .nav-icon { background: linear-gradient(135deg, #9254DE, #B37FEB); }
+    .nav-item:nth-child(6) .nav-icon { background: linear-gradient(135deg, #FF4D4F, #FF7875); }
+    .nav-item:nth-child(7) .nav-icon { background: linear-gradient(135deg, #597EF7, #85A5FF); }
+    .nav-item:nth-child(8) .nav-icon { background: linear-gradient(135deg, #73D13D, #95DE64); }
+    .nav-item:nth-child(9) .nav-icon { background: linear-gradient(135deg, #FF9C6E, #FFBB99); }
+    .nav-item:nth-child(10) .nav-icon { background: linear-gradient(135deg, #FF85C0, #FFADD2); }
+    
+    .nav-text {
+      font-size: 12px;
+      color: #333;
+    }
+    
+    /* 轮播 Banner */
+    .banner {
+      padding: 0 16px;
+      margin-bottom: 12px;
+    }
+    
+    .banner-img {
+      width: 100%;
+      height: 120px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 600;
+    }
+    
+    /* 热门推荐 */
+    .section {
+      padding: 12px 16px;
+      background: #fff;
+      margin-bottom: 8px;
+    }
+    
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .section-more {
+      font-size: 12px;
+      color: #999;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    /* 热门目的地 */
+    .destinations {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    
+    .dest-card {
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .dest-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+    
+    .dest-img {
+      width: 100%;
+      height: 100px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    
+    .dest-img-1 { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+    .dest-img-2 { background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%); }
+    .dest-img-3 { background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%); }
+    .dest-img-4 { background: linear-gradient(135deg, #fddb92 0%, #d1fdff 100%); }
+    
+    .dest-tag {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(255,255,255,0.9);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+      color: #FF6B35;
+      font-weight: 500;
+    }
+    
+    .dest-info {
+      padding: 10px;
+    }
+    
+    .dest-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 4px;
+    }
+    
+    .dest-price {
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .dest-price span {
+      color: #FF6B35;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    
+    /* 特惠酒店 */
+    .hotels {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    
+    .hotels::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .hotel-card {
+      min-width: 200px;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      overflow: hidden;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    
+    .hotel-card:hover {
+      transform: translateY(-2px);
+    }
+    
+    .hotel-img {
+      width: 100%;
+      height: 120px;
+      background-size: cover;
+      background-position: center;
+    }
+    
+    .hotel-img-1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .hotel-img-2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+    .hotel-img-3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+    
+    .hotel-info {
+      padding: 10px;
+    }
+    
+    .hotel-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .hotel-rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 6px;
+    }
+    
+    .hotel-score {
+      background: #FF6B35;
+      color: #fff;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    
+    .hotel-type {
+      font-size: 11px;
+      color: #999;
+    }
+    
+    .hotel-price {
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .hotel-price span {
+      color: #FF6B35;
+      font-size: 18px;
+      font-weight: 600;
+    }
+    
+    /* 底部导航 */
+    .tab-bar {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      background: #fff;
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0 12px;
+      border-top: 1px solid #eee;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+    }
+    
+    .tab-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      flex: 1;
+    }
+    
+    .tab-icon {
+      font-size: 22px;
+      color: #999;
+    }
+    
+    .tab-item.active .tab-icon {
+      color: #FF6B35;
+    }
+    
+    .tab-text {
+      font-size: 10px;
+      color: #999;
+    }
+    
+    .tab-item.active .tab-text {
+      color: #FF6B35;
+      font-weight: 500;
+    }
+    
+    /* 占位 */
+    .spacer {
+      height: 70px;
+    }
+  </style>
+</head>
+<body>
+  <!-- 顶部 -->
+  <header class="header">
+    <div class="header-top">
+      <div class="location">
+        <span class="location-icon">📍</span>
+        <span>北京</span>
+        <span style="font-size: 10px;">▼</span>
+      </div>
+      <div class="header-actions">
+        <span>🔔</span>
+        <span>💬</span>
+      </div>
+    </div>
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" placeholder="搜索目的地、酒店、景点">
+    </div>
+  </header>
+  
+  <!-- 核心功能入口 -->
+  <nav class="main-nav">
+    <div class="nav-item">
+      <div class="nav-icon">🎊</div>
+      <span class="nav-text">五一特惠</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">🏨</div>
+      <span class="nav-text">酒店</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">🚄</div>
+      <span class="nav-text">火车票</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">🎫</div>
+      <span class="nav-text">景点门票</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">🚗</div>
+      <span class="nav-text">租车</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">🧳</div>
+      <span class="nav-text">旅游</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">🚢</div>
+      <span class="nav-text">船票</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">🗺️</div>
+      <span class="nav-text">攻略</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">🍱</div>
+      <span class="nav-text">美食</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">🎁</div>
+      <span class="nav-text">更多</span>
+    </div>
+  </nav>
+  
+  <!-- Banner -->
+  <div class="banner">
+    <div class="banner-img">🎊 五一劳动节特惠 · 机票低至1折起</div>
+  </div>
+  
+  <!-- 热门目的地 -->
+  <section class="section">
+    <div class="section-header">
+      <h3 class="section-title">🔥 热门目的地</h3>
+      <span class="section-more">更多 ▶</span>
+    </div>
+    <div class="destinations">
+      <div class="dest-card">
+        <div class="dest-img dest-img-1">
+          <span class="dest-tag">热门</span>
+        </div>
+        <div class="dest-info">
+          <div class="dest-name">三亚</div>
+          <div class="dest-price"><span>¥699</span> 起</div>
+        </div>
+      </div>
+      <div class="dest-card">
+        <div class="dest-img dest-img-2">
+          <span class="dest-tag">特价</span>
+        </div>
+        <div class="dest-info">
+          <div class="dest-name">丽江</div>
+          <div class="dest-price"><span>¥599</span> 起</div>
+        </div>
+      </div>
+      <div class="dest-card">
+        <div class="dest-img dest-img-3">
+          <span class="dest-tag">网红</span>
+        </div>
+        <div class="dest-info">
+          <div class="dest-name">厦门</div>
+          <div class="dest-price"><span>¥499</span> 起</div>
+        </div>
+      </div>
+      <div class="dest-card">
+        <div class="dest-img dest-img-4">
+          <span class="dest-tag">推荐</span>
+        </div>
+        <div class="dest-info">
+          <div class="dest-name">成都</div>
+          <div class="dest-price"><span>¥399</span> 起</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- 特惠酒店 -->
+  <section class="section">
+    <div class="section-header">
+      <h3 class="section-title">🏨 特惠酒店</h3>
+      <span class="section-more">更多 ▶</span>
+    </div>
+    <div class="hotels">
+      <div class="hotel-card">
+        <div class="hotel-img hotel-img-1"></div>
+        <div class="hotel-info">
+          <div class="hotel-name">北京王府井希尔顿酒店</div>
+          <div class="hotel-rating">
+            <span class="hotel-score">4.8</span>
+            <span class="hotel-type">豪华型</span>
+          </div>
+          <div class="hotel-price"><span>¥888</span>/晚</div>
+        </div>
+      </div>
+      <div class="hotel-card">
+        <div class="hotel-img hotel-img-2"></div>
+        <div class="hotel-info">
+          <div class="hotel-name">上海外滩W酒店</div>
+          <div class="hotel-rating">
+            <span class="hotel-score">4.9</span>
+            <span class="hotel-type">豪华型</span>
+          </div>
+          <div class="hotel-price"><span>¥1288</span>/晚</div>
+        </div>
+      </div>
+      <div class="hotel-card">
+        <div class="hotel-img hotel-img-3"></div>
+        <div class="hotel-info">
+          <div class="hotel-name">三亚亚特兰蒂斯酒店</div>
+          <div class="hotel-rating">
+            <span class="hotel-score">4.7</span>
+            <span class="hotel-type">豪华型</span>
+          </div>
+          <div class="hotel-price"><span>¥2088</span>/晚</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- 占位 -->
+  <div class="spacer"></div>
+  
+  <!-- 底部导航 -->
+  <nav class="tab-bar">
+    <div class="tab-item active">
+      <span class="tab-icon">🏠</span>
+      <span class="tab-text">首页</span>
+    </div>
+    <div class="tab-item">
+      <span class="tab-icon">❤️</span>
+      <span class="tab-text">收藏</span>
+    </div>
+    <div class="tab-item">
+      <span class="tab-icon">📋</span>
+      <span class="tab-text">订单</span>
+    </div>
+    <div class="tab-item">
+      <span class="tab-icon">👤</span>
+      <span class="tab-text">我的</span>
+    </div>
+  </nav>
+</body>
+</html>

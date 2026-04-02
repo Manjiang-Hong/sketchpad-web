@@ -1,0 +1,290 @@
+/* SketchPad Web 样式 */
+
+.sketch-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f5f5f5;
+  overflow: hidden;
+  position: relative;
+  /* 确保容器本身不受任何 transform 影响 */
+  transform: none !important;
+}
+
+/* Canvas + iframe 的共同容器（一起缩放平移） */
+.canvas-wrapper {
+  flex: 1;
+  /* 不设置 position，让子元素向上查找 .sketch-container */
+  overflow: hidden;
+  z-index: 1;
+  transform: none !important;
+}
+
+.canvas-content {
+  position: absolute;
+  top: 56px; /* 工具栏高度 */
+  left: 0;
+  width: 100%;
+  height: calc(100% - 56px);
+  transform-origin: 0 0;
+  z-index: 1;
+  /* 只包含 iframe 和 canvas */
+  pointer-events: none; /* 让事件穿透到 canvas */
+}
+
+.canvas-content > * {
+  pointer-events: auto; /* 恢复 canvas 和 iframe 的事件 */
+}
+
+.sketch-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent !important;
+  touch-action: none;
+  z-index: 1;
+}
+
+/* iframe 背景层 */
+.bg-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  z-index: 0;
+  pointer-events: none;
+  background: white;
+}
+
+/* 工具栏 */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: fixed; /* 固定定位，不受任何变换影响 */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  isolation: isolate;
+}
+
+.toolbar button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toolbar button:hover {
+  background: #f0f0f0;
+}
+
+.toolbar button.active {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.toolbar button.recording {
+  color: #f44336;
+  animation: pulse 1s infinite;
+}
+
+.separator {
+  width: 1px;
+  height: 24px;
+  background: #e0e0e0;
+  margin: 0 4px;
+}
+
+.zoom-level {
+  min-width: 50px;
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+}
+
+/* 颜色面板 */
+.color-palette {
+  position: fixed; /* 固定定位 */
+  left: 16px;
+  top: 70px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+}
+
+.color-btn {
+  width: 32px;
+  height: 32px;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.color-btn:hover {
+  transform: scale(1.1);
+}
+
+.color-btn.active {
+  border-color: #1976d2;
+  transform: scale(1.15);
+}
+
+/* 笔刷大小 */
+.brush-sizes {
+  position: fixed; /* 固定定位 */
+  left: 70px;
+  top: 70px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+}
+
+.size-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 4px;
+  background: #f5f5f5;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.size-btn:hover {
+  background: #e0e0e0;
+}
+
+.size-btn.active {
+  background: #1976d2;
+  color: white;
+}
+
+/* AI 生图弹窗 */
+.prompt-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.prompt-dialog {
+  width: 400px;
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.prompt-dialog h3 {
+  margin: 0 0 16px;
+  font-size: 18px;
+  color: #333;
+}
+
+.prompt-dialog textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.prompt-dialog textarea:focus {
+  outline: none;
+  border-color: #1976d2;
+}
+
+.dialog-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  justify-content: flex-end;
+}
+
+.dialog-buttons button {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dialog-buttons button:first-child {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.dialog-buttons button:first-child:hover {
+  background: #e0e0e0;
+}
+
+.dialog-buttons button:last-child {
+  background: #1976d2;
+  color: white;
+}
+
+.dialog-buttons button:last-child:hover {
+  background: #1565c0;
+}
+
+.dialog-buttons button:last-child:disabled {
+  background: #bdbdbd;
+  cursor: not-allowed;
+}
+
+/* 状态栏 */
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.95);
+  border-top: 1px solid #e0e0e0;
+  font-size: 12px;
+  color: #666;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
